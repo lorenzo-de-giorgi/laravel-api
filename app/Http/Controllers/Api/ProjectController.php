@@ -10,27 +10,32 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::all();
-        // dd($projects);
+
+        $projects = Project::with('category')->get();
+        //dd($projects);
         return response()->json([
-            'success' => true,
+            'status' => 'success',
+            'message' => 'Ok',
             'results' => $projects
-        ]);
+        ], 200);
     }
 
     public function show($slug)
     {
-        $project = Project::where('slug', $slug)->with('category', 'technologies')->first();
-        if($project){
+        $project = Project::where('slug', $slug)->with('category', 'tags')->first();
+        if ($project) {
             return response()->json([
-                'success'=> true,
+                'status' => 'success',
+                'message' => 'Ok',
                 'results' => $project
-            ]);
+            ], 200);
         } else {
             return response()->json([
-                'success' => false,
-                'results' => 'Post not found'
-            ]);
+                'status' => 'error',
+                'message' => 'Error'
+
+            ], 404);
         }
+
     }
 }
